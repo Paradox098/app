@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lifesaver Mobile App</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 1rem 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        main {
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        section {
+            background: white;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        section:hover {
+            transform: translateY(-5px);
+        }
+        h2 {
+            color: #4CAF50;
+            margin-top: 0;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            margin: 0.5rem 0 0.2rem;
+        }
+        input[type="text"], input[type="tel"] {
+            padding: 0.7rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.7rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            background: #e9f5e9;
+            margin: 0.5rem 0;
+            padding: 0.7rem;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s;
+        }
+        li:hover {
+            background: #d4ecd4;
+        }
+        footer {
+            text-align: center;
+            padding: 1rem 0;
+            background-color: #4CAF50;
+            color: white;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+        }
+        #location {
+            margin-top: 1rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lifesaver Mobile Application</h1>
+    </header>
+    <main>
+        <section id="emergency-contacts">
+            <h2>Emergency Contacts</h2>
+            <p>Add your emergency contacts below. These contacts will be notified in case of an emergency.</p>
+            <form id="contact-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                <label for="phone">Phone Number:</label>
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
+                <button type="submit">Add Contact</button>
+            </form>
+            <ul id="contact-list"></ul>
+        </section>
+        <section id="location-tracking">
+            <h2>Location Tracking</h2>
+            <p>Enable location tracking to help your contacts find you in an emergency.</p>
+            <button id="track-location">Track My Location</button>
+            <div id="location"></div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Lifesaver Mobile Application</p>
+    </footer>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const contactForm = document.getElementById('contact-form');
+            const contactList = document.getElementById('contact-list');
+            const trackLocationButton = document.getElementById('track-location');
+            const locationDiv = document.getElementById('location');
+
+            contactForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const name = document.getElementById('name').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+
+                // Validate phone number to ensure it contains only digits
+                const phonePattern = /^[0-9]{10}$/;
+                if (!phonePattern.test(phone)) {
+                    alert('Please enter a valid 10-digit phone number.');
+                    return;
+                }
+                
+                if (name && phone) {
+                    const li = document.createElement('li');
+                    li.textContent = `${name} - ${phone}`;
+                    contactList.appendChild(li);
+                    contactForm.reset();
+                } else {
+                    alert('Please fill out both the name and phone number fields.');
+                }
+            });
+
+            trackLocationButton.addEventListener('click', () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(showPosition, showError);
+                } else {
+                    locationDiv.innerHTML = "Geolocation is not supported by this browser.";
+                }
+            });
+
+            function showPosition(position) {
+                locationDiv.innerHTML = `Latitude: ${position.coords.latitude.toFixed(6)}<br>Longitude: ${position.coords.longitude.toFixed(6)}`;
+            }
+
+            function showError(error) {
+                switch (error.code) {
+                    case error.PERMISSION_DENIED:
+                        locationDiv.innerHTML = "User denied the request for Geolocation.";
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        locationDiv.innerHTML = "Location information is unavailable.";
+                        break;
+                    case error.TIMEOUT:
+                        locationDiv.innerHTML = "The request to get user location timed out.";
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        locationDiv.innerHTML = "An unknown error occurred.";
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
