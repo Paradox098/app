@@ -5,26 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Life Saver App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #eef2f7;
-            color: #333;
-            transition: background-color 0.3s, color 0.3s;
+            font-family: Arial, sans-serif;
+            transition: background-color 0.5s, color 0.5s;
         }
 
         header, footer {
             text-align: center;
-            padding: 20px;
-            background-color: #007bff;
-            color: white;
+            padding: 10px;
+            background-color: #f1f1f1;
         }
 
         h1 {
             margin: 0;
-            font-size: 2.5em;
         }
 
         main {
@@ -33,125 +28,53 @@
 
         section {
             margin-bottom: 20px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-            transition: transform 0.2s;
-        }
-
-        section:hover {
-            transform: scale(1.02);
         }
 
         button {
             display: block;
-            width: 100%;
             margin: 10px 0;
-            padding: 15px;
+            padding: 10px;
             font-size: 16px;
-            color: white;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
 
-        button:hover {
-            background-color: #0056b3;
-        }
-
-       .hidden {
+        .hidden {
             display: none;
         }
 
         #map {
             width: 100%;
             height: 300px;
-            border-radius: 10px;
-            margin-top: 10px;
         }
 
-       .contacts ul {
+        .contacts ul, .hospitals ul {
             list-style-type: none;
             padding: 0;
         }
 
-       .contacts li {
+        .contacts li, .hospitals li {
             margin: 5px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
         }
 
-       .contacts button {
-            padding: 5px 10px;
-            background-color: #dc3545;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
+        .contacts button {
+            padding: 5px;
         }
 
-       .contacts button:hover {
-            background-color: #c82333;
+        body.dark-mode {
+            background-color: #2c3e50;
+            color: #ecf0f1;
         }
 
-       .first-aid h3 {
-            margin-top: 0;
+        body.dark-mode header, body.dark-mode footer {
+            background-color: #34495e;
         }
 
-       .first-aid p {
-            margin: 5px 0;
-        }
-
-       .animated-section {
-            animation: fadeIn 1s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-       .weather,.hospitals,.health-tips {
-            margin-bottom: 20px;
-            padding: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 15px;
-        }
-
-       .dark-mode {
-            background-color: #333;
-            color: #ccc;
-        }
-
-       .dark-mode header,.dark-mode footer {
-            background-color: #555;
-        }
-
-       .dark-mode button {
-            background-color: #555;
-        }
-
-       .dark-mode button:hover {
-            background-color: #333;
-        }
-
-       .dark-mode.contacts li {
-            background-color: #444;
-            color: #ccc;
-        }
-
-       .dark-mode section {
-            background-color: #444;
-            color: #ccc;
+        body.dark-mode button {
+            background-color: #34495e;
+            color: #ecf0f1;
         }
     </style>
 </head>
@@ -161,23 +84,23 @@
     </header>
     <main>
         <button id="toggleDarkMode"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
-        <section class="emergency animated-section">
+        <section class="emergency">
             <h2>Emergency Services</h2>
             <button id="callAmbulance"><i class="fas fa-ambulance"></i> Call Ambulance</button>
             <button id="callFire"><i class="fas fa-fire-extinguisher"></i> Call Fire Department</button>
             <button id="callPolice"><i class="fas fa-police-car"></i> Call Police</button>
         </section>
-        <section class="contacts animated-section">
+        <section class="contacts">
             <h2>Emergency Contacts</h2>
             <ul id="contactList"></ul>
             <button id="addContact"><i class="fas fa-plus"></i> Add Emergency Contact</button>
         </section>
-        <section class="location animated-section">
+        <section class="location">
             <h2>Current Location</h2>
             <div id="map"></div>
             <button id="refreshLocation"><i class="fas fa-sync-alt"></i> Refresh Location</button>
         </section>
-        <section class="first-aid animated-section">
+        <section class="first-aid">
             <h2>First Aid Tips</h2>
             <button id="showFirstAid"><i class="fas fa-book-medical"></i> Show First Aid Tips</button>
             <div id="firstAidTips" class="hidden">
@@ -191,15 +114,27 @@
                 <p>3. Seek medical help if necessary.</p>
             </div>
         </section>
-        <section class="weather animated-section">
+        <section class="weather">
             <h2>Current Weather</h2>
-            <div id="weatherInfo">Loading weather information...</div>
+            <div id="weatherWidget">
+                <!-- Weather widget from https://weatherwidget.io/ -->
+                <a class="weatherwidget-io" href="https://forecast7.com/en/12d9777d59/bengaluru/" data-label_1="bangaluru" data-label_2="WEATHER" data-theme="pure">SAN FRANCISCO WEATHER</a>
+                <script>
+                    !function(d,s,id){
+                        var js,fjs=d.getElementsByTagName(s)[0];
+                        if(!d.getElementById(id)){
+                            js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';
+                            fjs.parentNode.insertBefore(js,fjs);
+                        }
+                    }(document,'script','weatherwidget-io-js');
+                </script>
+            </div>
         </section>
-        <section class="hospitals animated-section">
+        <section class="hospitals">
             <h2>Nearby Hospitals</h2>
             <ul id="hospitalList">Loading nearby hospitals...</ul>
         </section>
-        <section class="health-tips animated-section">
+        <section class="health-tips">
             <h2>Daily Health Tips</h2>
             <div id="healthTip">Loading health tips...</div>
         </section>
@@ -207,8 +142,10 @@
     <footer>
         <p>&copy; 2024 Life Saver App</p>
     </footer>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Emergency services buttons
             document.getElementById('callAmbulance').addEventListener('click', () => {
                 window.location.href = 'tel:+102'; 
             });
@@ -221,11 +158,13 @@
                 window.location.href = 'tel:+100'; 
             });
 
+            // First aid tips toggle
             document.getElementById('showFirstAid').addEventListener('click', () => {
                 const firstAidTips = document.getElementById('firstAidTips');
                 firstAidTips.classList.toggle('hidden');
             });
 
+            // Emergency contacts
             const contactList = document.getElementById('contactList');
             const contacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
 
@@ -258,74 +197,42 @@
 
             renderContacts();
 
-            const mapElement = document.getElementById('map');
-            let map, marker;
+            // Initialize the map using Leaflet.js
+            const map = L.map('map').setView([51.505, -0.09], 13);
 
-            window.initMap = function() {
-                map = new google.maps.Map(mapElement, {
-                    center: { lat: -34.397, lng: 150.644 },
-                    zoom: 8,
-                });
-                marker = new google.maps.Marker({
-                    map: map,
-                    position: { lat: 20.5937, lng: 78.9629 },
-                });
-                fetchLocation();
-            };
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            const marker = L.marker([51.505, -0.09]).addTo(map);
 
             function fetchLocation() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
                         (position) => {
                             const { latitude, longitude } = position.coords;
-                            const pos = { lat: latitude, lng: longitude };
-                            map.setCenter(pos);
-                            marker.setPosition(pos);
-
-                            // Once location is fetched, fetch weather and nearby hospitals
-                            fetchWeather();
-                            fetchNearbyHospitals();
+                            const pos = [latitude, longitude];
+                            map.setView(pos, 13);
+                            marker.setLatLng(pos);
                         },
                         () => {
-                            handleLocationError(true, map.getCenter());
+                            handleLocationError(true);
                         }
                     );
-} else {
-                    handleLocationError(false, map.getCenter());
+                } else {
+                    handleLocationError(false);
                 }
             }
 
-            function handleLocationError(browserHasGeolocation, pos) {
-                const infoWindow = new google.maps.InfoWindow({
-                    position: pos,
-                });
-                infoWindow.setContent(
+            function handleLocationError(browserHasGeolocation) {
+                console.error(
                     browserHasGeolocation
-                       ? 'Error: The Geolocation service failed.'
+                        ? 'Error: The Geolocation service failed.'
                         : 'Error: Your browser doesn\'t support geolocation.'
                 );
-                infoWindow.open(map);
             }
 
             document.getElementById('refreshLocation').addEventListener('click', fetchLocation);
-
-            // Simulated Weather Data
-            function fetchWeather() {
-                const weatherInfo = document.getElementById('weatherInfo');
-                const weatherData = {
-                    temperature: 28,
-                    description: 'Partly cloudy',
-                    humidity: 60,
-                    windSpeed: 15
-                };
-
-                weatherInfo.innerHTML = `
-                    <p><strong>Temperature:</strong> ${weatherData.temperature}°C</p>
-                    <p><strong>Description:</strong> ${weatherData.description}</p>
-                    <p><strong>Humidity:</strong> ${weatherData.humidity}%</p>
-                    <p><strong>Wind Speed:</strong> ${weatherData.windSpeed} km/h</p>
-                `;
-            }
 
             // Simulated Nearby Hospitals Data
             function fetchNearbyHospitals() {
@@ -333,40 +240,47 @@
                 const hospitals = [
                     { name: 'City Hospital', distance: '2 km' },
                     { name: 'General Hospital', distance: '4 km' },
-                    { name: 'Community Hospital', distance: '5 km' }
-                ];
+                    { name: 'Community Hospital', distance: '5 km'}
+                    ];
 
-                hospitalList.innerHTML = hospitals.map(hospital => `
-                    <li>${hospital.name} - ${hospital.distance}</li>
-                `).join('');
-            }
+hospitalList.innerHTML = hospitals.map(hospital => `
+    <li>
+        <strong>${hospital.name}</strong><br>
+        ${hospital.distance}
+    </li>
+`).join('');
+}
 
-            // Simulated Health Tips Data
-            function fetchHealthTips() {
-                const healthTip = document.getElementById('healthTip');
-                const tips = [
-                    'Wash your hands frequently.',
-                    'Stay hydrated throughout the day.',
-                    'Get enough sleep each night.',
-                    'Eat a balanced diet rich in fruits and vegetables.'
-                ];
+fetchNearbyHospitals();
 
-                healthTip.innerHTML = tips.map(tip => `
-                    <p>${tip}</p>
-                `).join('');
-            }
+// Simulated Daily Health Tips
+function fetchHealthTips() {
+const healthTipElement = document.getElementById('healthTip');
+const healthTips = [
+    'Drink plenty of water to stay hydrated.',
+    'Exercise regularly to maintain physical health.',
+    'Eat a balanced diet with plenty of fruits and vegetables.',
+    'Get enough sleep each night to rejuvenate your body.',
+    'Practice good hygiene to prevent illnesses.'
+];
 
-            fetchHealthTips();
+// Display a random health tip
+const randomTip = healthTips[Math.floor(Math.random() * healthTips.length)];
+healthTipElement.textContent = randomTip;
+}
 
-            // Dark Mode Toggle
-            const toggleDarkModeButton = document.getElementById('toggleDarkMode');
-            toggleDarkModeButton.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
-                const sections = document.querySelectorAll('section, header, footer');
-                sections.forEach(section => section.classList.toggle('dark-mode'));
-            });
-        });
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+fetchHealthTips();
+
+// Toggle Dark Mode
+const darkModeToggle = document.getElementById('toggleDarkMode');
+darkModeToggle.addEventListener('click', () => {
+document.body.classList.toggle('dark-mode');
+});
+
+// Fetch the initial location
+fetchLocation();
+});
+</script>
 </body>
 </html>
+
