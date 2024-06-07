@@ -3,187 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lifesaver Mobile App</title>
+    <title>Life Saver App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(to right, #e0eafc, #cfdef3);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            background-color: #eef2f7;
             color: #333;
+            transition: background-color 0.3s, color 0.3s;
         }
-        header {
-            background-color: #4CAF50;
-            color: white;
+
+        header, footer {
             text-align: center;
-            padding: 1rem 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
-        main {
-            padding: 2rem;
-            max-width: 800px;
-            margin: 0 auto;
-        }
-        section {
-            background: white;
-            margin-bottom: 2rem;
-            padding: 2rem;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s;
-        }
-        section:hover {
-            transform: translateY(-5px);
-        }
-        h2 {
-            color: #4CAF50;
-            margin-top: 0;
-        }
-        form {
-            display: flex;
-            flex-direction: column;
-        }
-        label {
-            margin: 0.5rem 0 0.2rem;
-        }
-        input[type="text"], input[type="tel"] {
-            padding: 0.7rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 1rem;
-        }
-        button {
-            background-color: #4CAF50;
+            padding: 20px;
+            background-color: #007bff;
             color: white;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5em;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        section {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            transition: transform 0.2s;
+        }
+
+        section:hover {
+            transform: scale(1.02);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
             border: none;
-            padding: 0.7rem;
-            border-radius: 4px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 1rem;
             transition: background-color 0.3s;
         }
+
         button:hover {
-            background-color: #45a049;
+            background-color: #0056b3;
         }
-        ul {
+
+       .hidden {
+            display: none;
+        }
+
+        #map {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+       .contacts ul {
             list-style-type: none;
             padding: 0;
         }
-        li {
-            background: #e9f5e9;
-            margin: 0.5rem 0;
-            padding: 0.7rem;
-            border-radius: 4px;
+
+       .contacts li {
+            margin: 5px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: background 0.3s;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
         }
-        li:hover {
-            background: #d4ecd4;
-        }
-        footer {
-            text-align: center;
-            padding: 1rem 0;
-            background-color: #4CAF50;
+
+       .contacts button {
+            padding: 5px 10px;
+            background-color: #dc3545;
             color: white;
-            position: fixed;
-            width: 100%;
-            bottom: 0;
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        #location {
-            margin-top: 1rem;
-            font-weight: bold;
+
+       .contacts button:hover {
+            background-color: #c82333;
+        }
+
+       .first-aid h3 {
+            margin-top: 0;
+        }
+
+       .first-aid p {
+            margin: 5px 0;
+        }
+
+       .animated-section {
+            animation: fadeIn 1s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+       .weather,.hospitals,.health-tips {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+        }
+
+       .dark-mode {
+            background-color: #333;
+            color: #ccc;
+        }
+
+       .dark-mode header,.dark-mode footer {
+            background-color: #555;
+        }
+
+       .dark-mode button {
+            background-color: #555;
+        }
+
+       .dark-mode button:hover {
+            background-color: #333;
+        }
+
+       .dark-mode.contacts li {
+            background-color: #444;
+            color: #ccc;
+        }
+
+       .dark-mode section {
+            background-color: #444;
+            color: #ccc;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>Lifesaver Mobile Application</h1>
+        <h1><i class="fas fa-life-ring"></i> Life Saver App</h1>
     </header>
     <main>
-        <section id="emergency-contacts">
-            <h2>Emergency Contacts</h2>
-            <p>Add your emergency contacts below. These contacts will be notified in case of an emergency.</p>
-            <form id="contact-form">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
-                <label for="phone">Phone Number:</label>
-                <input type="tel" id="phone" name="phone" required pattern="[0-9]{10}">
-                <button type="submit">Add Contact</button>
-            </form>
-            <ul id="contact-list"></ul>
+        <button id="toggleDarkMode"><i class="fas fa-adjust"></i> Toggle Dark Mode</button>
+        <section class="emergency animated-section">
+            <h2>Emergency Services</h2>
+            <button id="callAmbulance"><i class="fas fa-ambulance"></i> Call Ambulance</button>
+            <button id="callFire"><i class="fas fa-fire-extinguisher"></i> Call Fire Department</button>
+            <button id="callPolice"><i class="fas fa-police-car"></i> Call Police</button>
         </section>
-        <section id="location-tracking">
-            <h2>Location Tracking</h2>
-            <p>Enable location tracking to help your contacts find you in an emergency.</p>
-            <button id="track-location">Track My Location</button>
-            <div id="location"></div>
+        <section class="contacts animated-section">
+            <h2>Emergency Contacts</h2>
+            <ul id="contactList"></ul>
+            <button id="addContact"><i class="fas fa-plus"></i> Add Emergency Contact</button>
+        </section>
+        <section class="location animated-section">
+            <h2>Current Location</h2>
+            <div id="map"></div>
+            <button id="refreshLocation"><i class="fas fa-sync-alt"></i> Refresh Location</button>
+        </section>
+        <section class="first-aid animated-section">
+            <h2>First Aid Tips</h2>
+            <button id="showFirstAid"><i class="fas fa-book-medical"></i> Show First Aid Tips</button>
+            <div id="firstAidTips" class="hidden">
+                <h3>CPR</h3>
+                <p>1. Check responsiveness.</p>
+                <p>2. Call 911 and start chest compressions.</p>
+                <p>3. Give rescue breaths.</p>
+                <h3>Bleeding</h3>
+                <p>1. Apply pressure to the wound.</p>
+                <p>2. Elevate the injured area.</p>
+                <p>3. Seek medical help if necessary.</p>
+            </div>
+        </section>
+        <section class="weather animated-section">
+            <h2>Current Weather</h2>
+            <div id="weatherInfo">Loading weather information...</div>
+        </section>
+        <section class="hospitals animated-section">
+            <h2>Nearby Hospitals</h2>
+            <ul id="hospitalList">Loading nearby hospitals...</ul>
+        </section>
+        <section class="health-tips animated-section">
+            <h2>Daily Health Tips</h2>
+            <div id="healthTip">Loading health tips...</div>
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Lifesaver Mobile Application</p>
+        <p>&copy; 2024 Life Saver App</p>
     </footer>
     <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const contactForm = document.getElementById('contact-form');
-            const contactList = document.getElementById('contact-list');
-            const trackLocationButton = document.getElementById('track-location');
-            const locationDiv = document.getElementById('location');
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('callAmbulance').addEventListener('click', () => {
+                window.location.href = 'tel:+102'; 
+            });
 
-            contactForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const name = document.getElementById('name').value.trim();
-                const phone = document.getElementById('phone').value.trim();
+            document.getElementById('callFire').addEventListener('click', () => {
+                window.location.href = 'tel:+112'; 
+            });
 
-                // Validate phone number to ensure it contains only digits
-                const phonePattern = /^[0-9]{10}$/;
-                if (!phonePattern.test(phone)) {
-                    alert('Please enter a valid 10-digit phone number.');
-                    return;
-                }
-                
-                if (name && phone) {
+            document.getElementById('callPolice').addEventListener('click', () => {
+                window.location.href = 'tel:+100'; 
+            });
+
+            document.getElementById('showFirstAid').addEventListener('click', () => {
+                const firstAidTips = document.getElementById('firstAidTips');
+                firstAidTips.classList.toggle('hidden');
+            });
+
+            const contactList = document.getElementById('contactList');
+            const contacts = JSON.parse(localStorage.getItem('emergencyContacts')) || [];
+
+            function renderContacts() {
+                contactList.innerHTML = '';
+                contacts.forEach((contact, index) => {
                     const li = document.createElement('li');
-                    li.textContent = `${name} - ${phone}`;
+                    li.textContent = `${contact.name}: ${contact.phone}`;
+                    const removeButton = document.createElement('button');
+                    removeButton.textContent = 'Remove';
+                    removeButton.addEventListener('click', () => {
+                        contacts.splice(index, 1);
+                        localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+                        renderContacts();
+                    });
+                    li.appendChild(removeButton);
                     contactList.appendChild(li);
-                    contactForm.reset();
-                } else {
-                    alert('Please fill out both the name and phone number fields.');
+                });
+            }
+
+            document.getElementById('addContact').addEventListener('click', () => {
+                const name = prompt('Enter contact name:');
+                const phone = prompt('Enter contact phone number:');
+                if (name && phone) {
+                    contacts.push({ name, phone });
+                    localStorage.setItem('emergencyContacts', JSON.stringify(contacts));
+                    renderContacts();
                 }
             });
 
-            trackLocationButton.addEventListener('click', () => {
+            renderContacts();
+
+            const mapElement = document.getElementById('map');
+            let map, marker;
+
+            window.initMap = function() {
+                map = new google.maps.Map(mapElement, {
+                    center: { lat: -34.397, lng: 150.644 },
+                    zoom: 8,
+                });
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: { lat: 20.5937, lng: 78.9629 },
+                });
+                fetchLocation();
+            };
+
+            function fetchLocation() {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(showPosition, showError);
-                } else {
-                    locationDiv.innerHTML = "Geolocation is not supported by this browser.";
+                    navigator.geolocation.getCurrentPosition(
+                        (position) => {
+                            const { latitude, longitude } = position.coords;
+                            const pos = { lat: latitude, lng: longitude };
+                            map.setCenter(pos);
+                            marker.setPosition(pos);
+
+                            // Once location is fetched, fetch weather and nearby hospitals
+                            fetchWeather();
+                            fetchNearbyHospitals();
+                        },
+                        () => {
+                            handleLocationError(true, map.getCenter());
+                        }
+                    );
+} else {
+                    handleLocationError(false, map.getCenter());
                 }
+            }
+
+            function handleLocationError(browserHasGeolocation, pos) {
+                const infoWindow = new google.maps.InfoWindow({
+                    position: pos,
+                });
+                infoWindow.setContent(
+                    browserHasGeolocation
+                       ? 'Error: The Geolocation service failed.'
+                        : 'Error: Your browser doesn\'t support geolocation.'
+                );
+                infoWindow.open(map);
+            }
+
+            document.getElementById('refreshLocation').addEventListener('click', fetchLocation);
+
+            // Simulated Weather Data
+            function fetchWeather() {
+                const weatherInfo = document.getElementById('weatherInfo');
+                const weatherData = {
+                    temperature: 28,
+                    description: 'Partly cloudy',
+                    humidity: 60,
+                    windSpeed: 15
+                };
+
+                weatherInfo.innerHTML = `
+                    <p><strong>Temperature:</strong> ${weatherData.temperature}°C</p>
+                    <p><strong>Description:</strong> ${weatherData.description}</p>
+                    <p><strong>Humidity:</strong> ${weatherData.humidity}%</p>
+                    <p><strong>Wind Speed:</strong> ${weatherData.windSpeed} km/h</p>
+                `;
+            }
+
+            // Simulated Nearby Hospitals Data
+            function fetchNearbyHospitals() {
+                const hospitalList = document.getElementById('hospitalList');
+                const hospitals = [
+                    { name: 'City Hospital', distance: '2 km' },
+                    { name: 'General Hospital', distance: '4 km' },
+                    { name: 'Community Hospital', distance: '5 km' }
+                ];
+
+                hospitalList.innerHTML = hospitals.map(hospital => `
+                    <li>${hospital.name} - ${hospital.distance}</li>
+                `).join('');
+            }
+
+            // Simulated Health Tips Data
+            function fetchHealthTips() {
+                const healthTip = document.getElementById('healthTip');
+                const tips = [
+                    'Wash your hands frequently.',
+                    'Stay hydrated throughout the day.',
+                    'Get enough sleep each night.',
+                    'Eat a balanced diet rich in fruits and vegetables.'
+                ];
+
+                healthTip.innerHTML = tips.map(tip => `
+                    <p>${tip}</p>
+                `).join('');
+            }
+
+            fetchHealthTips();
+
+            // Dark Mode Toggle
+            const toggleDarkModeButton = document.getElementById('toggleDarkMode');
+            toggleDarkModeButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                const sections = document.querySelectorAll('section, header, footer');
+                sections.forEach(section => section.classList.toggle('dark-mode'));
             });
-
-            function showPosition(position) {
-                locationDiv.innerHTML = `Latitude: ${position.coords.latitude.toFixed(6)}<br>Longitude: ${position.coords.longitude.toFixed(6)}`;
-            }
-
-            function showError(error) {
-                switch (error.code) {
-                    case error.PERMISSION_DENIED:
-                        locationDiv.innerHTML = "User denied the request for Geolocation.";
-                        break;
-                    case error.POSITION_UNAVAILABLE:
-                        locationDiv.innerHTML = "Location information is unavailable.";
-                        break;
-                    case error.TIMEOUT:
-                        locationDiv.innerHTML = "The request to get user location timed out.";
-                        break;
-                    case error.UNKNOWN_ERROR:
-                        locationDiv.innerHTML = "An unknown error occurred.";
-                        break;
-                }
-            }
         });
     </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
 </body>
 </html>
